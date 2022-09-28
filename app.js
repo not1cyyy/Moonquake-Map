@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
 
 const textureURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg"; 
-const displacementURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg"; 
+const displacementURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/ldem_3_8bit.jpg"; 
 const worldURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/hipp8_s.jpg"
 
 
@@ -30,11 +30,11 @@ var material = new THREE.MeshPhongMaterial (
   { color: 0xffffff ,
   map: texture ,
   displacementMap: displacementMap,
-  displacementScale: 0.06,
+  displacementScale: 0.01,
   bumpMap: displacementMap,
-  bumpScale: 0.04,
-   reflectivity:0, 
-   shininess :0
+  bumpScale: 0.07,
+   reflectivity:1, 
+   shininess :1
   } 
 
 );
@@ -47,7 +47,7 @@ light.position.set(5, 3,5);
 scene.add(light);
 
 
-var hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
+const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.5 );
 hemiLight.color.setHSL( 0.6, 1, 0.6 );
 hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
 hemiLight.position.set( 0, 0, 0 );
@@ -73,9 +73,9 @@ moon.rotation.y = 3.1415*1.54;
 
 function animate() {
 	requestAnimationFrame( animate );
-  moon.rotation.y += 0.002;
-  moon.rotation.x += 0.0001;
-  world.rotation.y += 0.0001
+  moon.rotation.y -= 0.001;
+  moon.rotation.x -= 0.0009;
+  world.rotation.y += 0.0002
   world.rotation.x += 0.0005
 
 	renderer.render( scene, camera );
