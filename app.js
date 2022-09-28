@@ -1,86 +1,92 @@
-let scene;
-let camera;
-let renderer;
+import * as THREE from 'three'; 
+import { OrbitControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
+
+const textureURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg"; 
+const displacementURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg"; 
+const worldURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/hipp8_s.jpg"
 
 
-function main()
-{
-    const canvas = document.querySelector('#c');
+var scene = new THREE.Scene();
+
+var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+var renderer = new THREE.WebGLRenderer();
+
+var controls = new OrbitControls( camera, renderer.domElement );
+controls.enablePan = false;
 
 
-    scene = new THREE.Scene();
+renderer.setSize( window.innerWidth, window.innerHeight );
+document.body.appendChild( renderer.domElement );
 
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 2;
-    scene.add(camera);
+var geometry = new THREE.SphereGeometry( 2,64,64 );
 
-    renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true,});
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+var textureLoader = new THREE.TextureLoader();
+var texture = textureLoader.load( textureURL );
+var displacementMap = textureLoader.load( displacementURL );
+var worldTexture = textureLoader.load( worldURL );
 
-    renderer.autoClear = false;
-    renderer.setClearColor(0x00000, 0.0);
+var material = new THREE.MeshPhongMaterial ( 
+  { color: 0xffffff ,
+  map: texture ,
+  displacementMap: displacementMap,
+  displacementScale: 0.06,
+  bumpMap: displacementMap,
+  bumpScale: 0.04,
+   reflectivity:0, 
+   shininess :0
+  } 
 
+);
 
-    // create moongeometry
-
-    const moongeometry = new THREE.SphereGeometry(0.5,64,64);
-
-    const moonmaterial = new THREE.MeshPhongMaterial({
-        roughness : 2,
-        metalness: 0,
-        map: THREE.ImageUtils.loadTexture('texture/moon.jpg'),
-        bumpMap: THREE.ImageUtils.loadTexture('texture/moon.jpg'),
-        bumpScale: 0.01,
-    });
-
-    const moonmesh = new THREE.Mesh(moongeometry,moonmaterial);
-
-    scene.add(moonmesh);
-
-    // set ambientlight
-
-    const ambientlight = new THREE.AmbientLight(0xffffff, 0.2);
-    scene.add(ambientlight);
-
-    // set point light
-
-    const pointerlight =  new THREE.PointLight(0xffffff, 0.9);
-
-    // set light position
-
-    pointerlight.position.set(2,4,5);
-    scene.add(pointerlight);
+var moon = new THREE.Mesh( geometry, material );
 
 
-    // set stars
+const light = new THREE.DirectionalLight(0xFFFFFF, 1);
+light.position.set(5, 3,5);
+scene.add(light);
 
-    const stargeometry =  new THREE.SphereGeometry(80,64,64);
 
-    const starmaterial = new THREE.MeshBasicMaterial({
+var hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.1 );
+hemiLight.color.setHSL( 0.6, 1, 0.6 );
+hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+hemiLight.position.set( 0, 0, 0 );
+scene.add( hemiLight );
 
-        map: THREE.ImageUtils.loadTexture('texture/galaxy.png'),
-        side: THREE.BackSide
-    });
 
-    const starmesh = new THREE.Mesh(stargeometry,starmaterial);
+var worldGeometry = new THREE.SphereGeometry( 1000,60,60 );
+var worldMaterial = new THREE.MeshBasicMaterial ( 
+  { color: 0xffffff ,
+  map: worldTexture ,
+  side: THREE.BackSide
+  } 
+);
+var world = new THREE.Mesh( worldGeometry, worldMaterial );
+scene.add( world );
 
-    scene.add(starmesh);
+scene.add( moon );
+camera.position.z = 5;
 
-    
-    const animate = () =>{
-        requestAnimationFrame(animate);
-        moonmesh.rotation.y -= 0.006;
-        moonmesh.rotation.x -= 0.006;
-        starmesh.rotation.y += 0.0005;
-        render();
-    }
+moon.rotation.x = 3.1415*0.02;
+moon.rotation.y = 3.1415*1.54;
 
-    const render = () => {
-        renderer.render(scene,camera);
-    }
 
-    animate();
+function animate() {
+	requestAnimationFrame( animate );
+  moon.rotation.y += 0.002;
+  moon.rotation.x += 0.0001;
+  world.rotation.y += 0.0001
+  world.rotation.x += 0.0005
+
+	renderer.render( scene, camera );
+}
+animate();
+
+
+function onResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-window.onload = main;
+window.addEventListener('resize', onResize, false);
