@@ -13,13 +13,13 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHe
 var renderer = new THREE.WebGLRenderer();
 
 var controls = new OrbitControls( camera, renderer.domElement );
-controls.enablePan = false;
+controls.enablePan = true;
 
 
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-var geometry = new THREE.SphereGeometry( 2,64,64 );
+var geometry = new THREE.SphereGeometry( 2 ,100 ,100 );
 
 var textureLoader = new THREE.TextureLoader();
 var texture = textureLoader.load( textureURL );
@@ -30,7 +30,7 @@ var material = new THREE.MeshPhongMaterial (
   { color: 0xffffff ,
   map: texture ,
   displacementMap: displacementMap,
-  displacementScale: 0.01,
+  displacementScale: 0.08,
   bumpMap: displacementMap,
   bumpScale: 0.07,
    reflectivity:1, 
@@ -43,7 +43,7 @@ var moon = new THREE.Mesh( geometry, material );
 
 
 const light = new THREE.DirectionalLight(0xFFFFFF, 1);
-light.position.set(5, 3,5);
+light.position.set( 5, 3, 5 );
 scene.add(light);
 
 
