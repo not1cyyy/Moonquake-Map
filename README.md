@@ -42,5 +42,3 @@ Exabyte Tape Data Format, DARTS Lunar and Planetary Science
 
 # Technologies used:
 - [Three.js](https://threejs.org/)
-
-suiii
