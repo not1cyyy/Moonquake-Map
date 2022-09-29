@@ -39,7 +39,7 @@ var material = new THREE.MeshPhongMaterial (
 
 );
 
-var moon = new THREE.Mesh( geometry, material );
+var lyna = new THREE.Mesh( geometry, material );
 
 
 const light = new THREE.DirectionalLight(0xFFFFFF, 1);
@@ -64,17 +64,17 @@ var worldMaterial = new THREE.MeshBasicMaterial (
 var world = new THREE.Mesh( worldGeometry, worldMaterial );
 scene.add( world );
 
-scene.add( moon );
+scene.add( lyna );
 camera.position.z = 5;
 
-moon.rotation.x = 3.1415*0.02;
-moon.rotation.y = 3.1415*1.54;
+lyna.rotation.x = 3.1415*0.02;
+lyna.rotation.y = 3.1415*1.54;
 
 
 function animate() {
 	requestAnimationFrame( animate );
-  moon.rotation.y -= 0.001;
-  moon.rotation.x -= 0.0009;
+  lyna.rotation.y -= 0.001;
+  lyna.rotation.x -= 0.0009;
   world.rotation.y += 0.0002
   world.rotation.x += 0.0005
 
