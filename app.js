@@ -1,9 +1,9 @@
 import * as THREE from 'three'; 
 import { OrbitControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
 
-const textureURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg"; 
-const displacementURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/ldem_3_8bit.jpg"; 
-const worldURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/hipp8_s.jpg"
+const textureLINK = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg"; 
+const displacementLINK = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/ldem_3_8bit.jpg"; 
+const worldLINK = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/hipp8_s.jpg"
 
 
 var scene = new THREE.Scene();
@@ -22,9 +22,9 @@ document.body.appendChild( renderer.domElement );
 var geometry = new THREE.SphereGeometry( 2 ,100 ,100 );
 
 var textureLoader = new THREE.TextureLoader();
-var texture = textureLoader.load( textureURL );
-var displacementMap = textureLoader.load( displacementURL );
-var worldTexture = textureLoader.load( worldURL );
+var texture = textureLoader.load( textureLINK );
+var displacementMap = textureLoader.load( displacementLINK );
+var worldTexture = textureLoader.load( worldLINK );
 
 var material = new THREE.MeshPhongMaterial ( 
   { color: 0xffffff ,
@@ -33,8 +33,8 @@ var material = new THREE.MeshPhongMaterial (
   displacementScale: 0.08,
   bumpMap: displacementMap,
   bumpScale: 0.07,
-   reflectivity:1, 
-   shininess :1
+   reflectivity:0, 
+   shininess :0
   } 
 
 );
